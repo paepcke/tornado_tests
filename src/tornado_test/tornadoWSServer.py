@@ -5,6 +5,7 @@ Created on Apr 8, 2015
 '''
 
 from checkbox import application
+import logging
 import os
 import socket
 import tornado.ioloop
@@ -13,6 +14,16 @@ import tornado.websocket
 
 
 class MainHandler(tornado.websocket.WebSocketHandler):
+    
+#     def __init__(self):
+#         super(MainHandler, self).__init__()
+#         #**********
+#         print('called')
+#         #**********
+#         self.tornadoLogger = logging.getLogger()
+#         self.tornadoLogger.setLevel(logging.DEBUG)
+#         #logging.info('Init called.')
+#         self.tornadoLogger.info('Init called.')
         
     def open(self):
         print "WebSocket opened"
@@ -27,9 +38,21 @@ class MainHandler(tornado.websocket.WebSocketHandler):
         print("Export class was called.")   
 
 if __name__ == "__main__":
+    
+    loggerAccess  = logging.getLogger('tornado.access')
+    loggerApp     = logging.getLogger('tornado.application')
+    loggerGeneral = logging.getLogger('tornado.general')
+    
+    loggerAccess.setLevel(logging.DEBUG)
+    loggerApp.setLevel(logging.DEBUG)
+    loggerGeneral.setLevel(logging.DEBUG)
+    
+    #loggerGeneral.log(logging.INFO, 'Logging OK')
+    
     application = tornado.web.Application([
                                            (r"/", MainHandler),
-                                           ])
+                                           ],
+                                          debug=True)
 
     homeDir = os.path.expanduser("~")
     thisFQDN = socket.getfqdn()
