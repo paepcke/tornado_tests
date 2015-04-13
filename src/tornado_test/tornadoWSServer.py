@@ -4,16 +4,16 @@ Created on Apr 8, 2015
 @author: paepcke
 '''
 
-from checkbox import application
 import logging
 import os
 import socket
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
+import tornado.httpserver
 
 
-class MainHandler(tornado.websocket.WebSocketHandler):
+class CourseCSVServer(tornado.websocket.WebSocketHandler):
     
 #     def __init__(self):
 #         super(MainHandler, self).__init__()
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     #loggerGeneral.log(logging.INFO, 'Logging OK')
     
     application = tornado.web.Application([
-                                           (r"/", MainHandler),
+                                           (r"/", CourseCSVServer),
                                            ],
                                           debug=True)
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
      "keyfile":  sslRoot + '.key',
      }
 
-    #http_server = tornado.httpserver.HTTPServer(application,ssl_options=sslArgsDict)
+    http_server = tornado.httpserver.HTTPServer(application,ssl_options=sslArgsDict)
 
     application.listen(9443)
     tornado.ioloop.IOLoop.instance().start()
