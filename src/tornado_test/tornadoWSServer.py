@@ -25,14 +25,17 @@ class CourseCSVServer(tornado.websocket.WebSocketHandler):
 #         #logging.info('Init called.')
 #         self.tornadoLogger.info('Init called.')
         
+    def check_origin(self, origin):
+        return True
+        
     def open(self):
-        print "WebSocket opened"
+        print("WebSocket opened")
 
     def on_message(self, message):
         self.write_message(u"You said: " + message)
 
     def on_close(self):
-        print "WebSocket closed"
+        print("WebSocket closed")
 
     def exportClass(self):
         print("Export class was called.")   
@@ -50,25 +53,28 @@ if __name__ == "__main__":
     #loggerGeneral.log(logging.INFO, 'Logging OK')
     
     application = tornado.web.Application([
-                                           (r"/", CourseCSVServer),
+                                           (r"/exportClass", CourseCSVServer),
                                            ],
                                           debug=True)
 
     homeDir = os.path.expanduser("~")
     thisFQDN = socket.getfqdn()
+    thisFQDNUnderscored = thisFQDN.replace('.', '_')
 
     sslRoot = '%s/.ssl/%s' % (homeDir, thisFQDN)
+    sslRootUnderscored = '%s/.ssl/%s' % (homeDir, thisFQDNUnderscored)
     #*********
     # For self signed certificate:
     #sslRoot = '/home/paepcke/.ssl/server'
     #*********
 
     sslArgsDict = {
-     "certfile": sslRoot + '.crt',
+     #"certfile": sslRoot + '.crt',
+     "certfile": sslRootUnderscored + '_cert.cer',
      "keyfile":  sslRoot + '.key',
      }
 
     http_server = tornado.httpserver.HTTPServer(application,ssl_options=sslArgsDict)
 
-    application.listen(9443)
+    application.listen(9443,  ssl_options=sslArgsDict)
     tornado.ioloop.IOLoop.instance().start()

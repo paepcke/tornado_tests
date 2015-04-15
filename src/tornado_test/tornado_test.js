@@ -22,14 +22,15 @@ function ExportClass() {
 	alert("Local constructor called; originHost is " + originHost);
 	//******ws = new WebSocket("wss://" + originHost + ":8080/exportClass");
 	//******ws = new WebSocket("wss://" + originHost + ":9443");
-	//******ws = new WebSocket("wss://" + "192.168.0.19" + ":9443");
-	ws = new WebSocket("wss://mono.stanford.edu:9443");
+	//******ws = new WebSocket("wss://" + "192.168.0.19" + ":
+	ws = new WebSocket("wss://mono.stanford.edu:9443/exportClass");
 	//******ws = new WebSocket("ws://mono.stanford.edu:9443");
 	//********
 
 	ws.onopen = function() {
 	    //keepAliveTimer = window.setInterval(function() {sendKeepAlive()}, keepAliveInterval);
 	    alert('Opened Websocket')
+	    ws.send("I am your browser.")
 	};
 
 	ws.onclose = function() {
@@ -46,7 +47,7 @@ function ExportClass() {
 	    // Internalize the JSON
 	    // e.g. "{resp : "courseList", "args" : ['course1','course2']"
 	    try {
-		alert("Got response from server.")
+		alert("Got response from server: " + evt.data)
 	    } catch(err) {
 		alert('Error report from server (' + oneLineData + '): ' + err );
 		return
