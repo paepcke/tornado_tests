@@ -3,12 +3,18 @@
 '''
 Created on Apr 9, 2015
 
+Not quite working. See tornado.concurrent.py and
+tornado.websocket.py for hints. I dropped getting
+it to run, b/c the clients I need right now are all
+Javascript. Therefore, see tornado_test.js for an
+example client.
+
 @author: paepcke
 '''
 
 import sys
 import time
-#import tornado
+import tornado
 #import platform
 
 from tornado.websocket import WebSocketHandler
@@ -45,15 +51,39 @@ class CourseCSVServer(WebSocketHandler):
         print("Thread terminating...")
         thread.start_new_thread(run, ())
 
+def on_message(ws, msg):
+    print("Received '%s' from server." % msg)
+
 if __name__ == "__main__":
     #websocket.enableTrace(True)
     if len(sys.argv) < 2:
         host = "ws://echo.websocket.org/"
     else:
         host = sys.argv[1]
-    application = Application([(r'/', CourseCSVServer)], debug=True)
-    application.listen(9443)
-    IOLoop.instance().start()
+    
+    # Get a tornado 'Future' instance whose result
+    # is a WebSocketClientConnection. Tornado Futures 
+    # are defined in tornado.concurrent.py. Two important
+    # methods are result(timeout=None), and done()
+    connectionFuture = tornado.websocket.websocket_connect("wss://mono.stanford.edu:9443/exportClass", on_message_callback=on_message)
+    print("waiting for connection to complete...")
+    while not connectionFuture.done():
+        time.sleep(0.1)
+    print("Connection completed...")
+    wsClientConnection = connectionFuture.result()
+    print "Sending 'Hello, World'..."
+    wsClientConnection.write_message("Hello, World")
+    print "Receiving..."
+    time.sleep(3)
+#    resultFuture =  wsClientConnection.read_message()
+#    print "Received '%s'" % resultFuture.result()
+    wsClientConnection.close()
+        
+        
+        
+#     application = Application([(r'/', CourseCSVServer)], debug=True)
+#     application.listen(9443)
+#     IOLoop.instance().start()
     
 #     ws = websocket.WebSocketApp(host,
 #         on_message = on_message,
