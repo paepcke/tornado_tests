@@ -20,10 +20,10 @@ function ExportClass() {
 	originHost = window.location.host;
 	//********
 	alert("Local constructor called; originHost is " + originHost);
-	//******ws = new WebSocket("wss://" + originHost + ":8080/exportClass");
+	ws = new WebSocket("wss://" + originHost + ":9443/exportClass");
 	//******ws = new WebSocket("wss://" + originHost + ":9443");
 	//******ws = new WebSocket("wss://" + "192.168.0.19" + ":
-	ws = new WebSocket("wss://mono.stanford.edu:9443/exportClass");
+	//******ws = new WebSocket("wss://mono.stanford.edu:9443/exportClass");
 	//******ws = new WebSocket("ws://mono.stanford.edu:9443");
 	//********
 
