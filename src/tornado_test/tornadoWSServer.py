@@ -4,9 +4,7 @@ Created on Apr 8, 2015
 @author: paepcke
 '''
 
-import logging
 import os
-import socket
 import tornado.ioloop
 import tornado.web
 import tornado.websocket
@@ -15,16 +13,6 @@ import tornado.httpserver
 
 class CourseCSVServer(tornado.websocket.WebSocketHandler):
     
-#     def __init__(self):
-#         super(MainHandler, self).__init__()
-#         #**********
-#         print('called')
-#         #**********
-#         self.tornadoLogger = logging.getLogger()
-#         self.tornadoLogger.setLevel(logging.DEBUG)
-#         #logging.info('Init called.')
-#         self.tornadoLogger.info('Init called.')
-        
     def check_origin(self, origin):
         return True
         
@@ -65,15 +53,6 @@ class CourseCSVServer(tornado.websocket.WebSocketHandler):
 
 if __name__ == "__main__":
     
-    loggerAccess  = logging.getLogger('tornado.access')
-    loggerApp     = logging.getLogger('tornado.application')
-    loggerGeneral = logging.getLogger('tornado.general')
-    
-    loggerAccess.setLevel(logging.DEBUG)
-    loggerApp.setLevel(logging.DEBUG)
-    loggerGeneral.setLevel(logging.DEBUG)
-    
-    #loggerGeneral.log(logging.INFO, 'Logging OK')
     
     application = tornado.web.Application([
                                            (r"/exportClass", CourseCSVServer),
