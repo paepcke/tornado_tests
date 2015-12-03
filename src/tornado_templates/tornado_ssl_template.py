@@ -44,6 +44,10 @@ methods as needed.
 For more documentation, including threading, see 
 http://tornadokevinlee.readthedocs.org/en/latest/web.html.
 
+For testing your server, try http://hurl.it. It lets you
+specify a full URL, such as http://myserver.com/myservice?foo=bar,
+and will show you the response from your server.
+
 '''
 
 class MyClass(tornado.web.RequestHandler):
